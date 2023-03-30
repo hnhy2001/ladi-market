@@ -12,6 +12,8 @@ export class DanhMucService {
 
   public resourceUrl = 'http://103.57.220.113:8080';
 
+  // public resourceUrl = 'http://crm.adsxanh-market.com:8081';
+
   // public resourceUrl = 'http://localhost:8080';
 
   constructor(protected http: HttpClient, ) {
