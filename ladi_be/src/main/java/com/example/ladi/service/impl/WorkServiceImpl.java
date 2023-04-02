@@ -102,7 +102,7 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
         if (work == null){
             return new BaseResponse(500, "Work not found", "Checkout Fail");
         }
-        List<Data> dataList = customDataRepository.checkOut("0,1,2,3,4,5,6,7", String.valueOf(work.getTimeIn()), String.valueOf(checkOutRequest.getTimeOut()), work.getAccount(), shopCode);
+        List<Data> dataList = customDataRepository.checkOut("0,1,2,3,4,5,6,7", "0", String.valueOf(checkOutRequest.getTimeOut()), work.getAccount(), shopCode);
         for (int i = 0; i<dataList.size(); i++){
             if (dataList.get(i).getStatus() == 1 || dataList.get(i).getStatus() == 2){
                 dataList.get(i).setStatus(0);
