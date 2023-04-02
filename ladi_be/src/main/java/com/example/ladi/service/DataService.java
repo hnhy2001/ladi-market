@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface DataService extends BaseService<Data> {
 
-    public BaseResponse getAllData(String jwt, String status, String startDate, String endDate, String shopCode);
+    public BaseResponse getAllData(String jwt, String status, String startDate, String endDate, String shopCode, int page, int size);
     public BaseResponse createData(Data data, String shopCode);
     public BaseResponse assignWork(AssignJobRequest assignJobRequest);
     public BaseResponse getAllDataAccountNull(String status, String shopCode);

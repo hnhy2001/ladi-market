@@ -20,6 +20,7 @@
             [ranges]="ranges" 
             [showCustomRangeLabel]="true"
             [alwaysShowCalendars]="true"
+            (change)="onChangeDate()"
             (ngModelChange)="loadData()"/>
           </div>
 
@@ -39,7 +40,7 @@
           </div>
 
           <div class="col-12 text-center">
-            <h6>Tổng số đơn: <span class="text-danger">{{listEntity.length}}</span>&nbsp;&nbsp;&nbsp;&nbsp;Doanh số: <span class="text-danger">{{tongDoanhSo.toLocaleString('vi', {style : 'currency', currency : 'VND'})}}</span></h6>
+            <h6>Tổng số đơn: <span class="text-danger">{{tongDon}}</span>&nbsp;&nbsp;&nbsp;&nbsp;Doanh số: <span class="text-danger">{{tongDoanhSo.toLocaleString('vi', {style : 'currency', currency : 'VND'})}}</span></h6>
           </div>
 
         </div>
@@ -47,13 +48,43 @@
       <div class="card-body">
           <jqxGrid #gridReference
           [width]="'100%'" [source]="dataAdapter" [columns]="columns" [editable]="true" [height]="height"
-          [pageable]="true" [autorowheight]="true" [sortable]="true" 
+          [pageable]="false" [sortable]="true" 
           [filterable]="true" [showfilterrow]="true"
           [altrows]="true"  [enabletooltips]="true"  [selectionmode]="'checkbox'"
           (onRowselect)="onRowSelect($event)" [localization]="localization"
           (onRowdoubleclick)="onRowdblclick($event)"
           >
           </jqxGrid>
+          <br>
+          <div class="row">
+            <div class="col-1">
+              <select name="" id="" class="form-control" [(ngModel)]="size" (change)="loadData()">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="5000">5000</option>
+              </select>
+            </div>
+            <div class="col-11">
+              <nav aria-label="Page navigation example" style="float:right">
+                <ul class="pagination ">
+                  
+                  <li class="page-item" (click)="previousPage()">
+                    <a class="page-link" tabindex="-1">Previous</a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">{{page+1}}</a></li>
+                  <li class="page-item" (click)="nextPage()">
+                    <a class="page-link" >Next</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          
       </div>
       <div class="col-lg-12 table-responsive" #TABLE #table style="display: none;">  
         <div style="padding-bottom: 10px;padding-top: 10px;">  

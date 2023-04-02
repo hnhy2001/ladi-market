@@ -44,9 +44,9 @@ public class DataController extends BaseController<Data>{
 
 
     @GetMapping("")
-    public BaseResponse getAllData(@RequestHeader(name = "Authorization") String jwt, @RequestParam String status, @RequestParam String startDate, @RequestParam String endDate, @RequestParam(name = "shopCode", required = false) String shopCode){
+    public BaseResponse getAllData(@RequestHeader(name = "Authorization") String jwt, @RequestParam String status, @RequestParam String startDate, @RequestParam String endDate, @RequestParam int page, @RequestParam int size, @RequestParam(name = "shopCode", required = false) String shopCode){
 
-        return dataService.getAllData(jwt, status, startDate, endDate, shopCode);
+        return dataService.getAllData(jwt, status, startDate, endDate, shopCode, page, size);
     }
 
     @PostMapping("createData")

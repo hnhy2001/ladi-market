@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 export class DanhMucService {
   // public resourceUrl = 'https://dhftech.store';
 
-  // public resourceUrl = 'http://103.75.185.204:8080';
+  public resourceUrl = 'http://103.75.185.204:8080';
 
-  public resourceUrl = 'http://103.57.220.113:8080';
+  // public resourceUrl = 'http://103.57.220.113:8080';
 
   // public resourceUrl = 'http://crm.adsxanh-market.com:8081';
 

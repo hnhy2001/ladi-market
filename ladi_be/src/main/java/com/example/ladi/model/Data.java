@@ -54,10 +54,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
                 @ColumnResult(name = "price", type = Long.class),
         }))
 @NamedNativeQuery(name = "Data.statisticDataByDateAndStatus",
-        query = "SELECT COUNT(id) as count, status  from `data` WHERE date_only <= :endDate and date_only >= :startDate AND shopcode = :shopCode GROUP BY status ",
+        query = "SELECT COUNT(id) as count, SUM(price) as sum, status  from `data` WHERE date_only <= :endDate and date_only >= :startDate AND shopcode = :shopCode GROUP BY status ",
         resultSetMapping = "Mapping.StatisticDataByDateAndStatusDto")
 @SqlResultSetMapping(name = "Mapping.StatisticDataByDateAndStatusDto", classes = @ConstructorResult(targetClass = StatisticDataByDateAndStatusDto.class,
         columns = {@ColumnResult(name = "count", type = Integer.class),
+                @ColumnResult(name = "sum", type = long.class),
                 @ColumnResult(name = "status", type = Integer.class)}))
 
 @NamedNativeQuery(name = "Data.statisticQuantityDataByDateAndStatus",

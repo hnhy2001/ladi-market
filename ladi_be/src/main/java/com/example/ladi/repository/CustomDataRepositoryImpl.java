@@ -19,7 +19,7 @@ public class CustomDataRepositoryImpl implements CustomDataRepository{
     EntityManager entityManager;
 
     @Override
-    public List<Data> finDataByConditions(String status, String startDate, String endDate, Account account, String shopCode) {
+    public List<Data> finDataByConditions(String status, String startDate, String endDate, Account account, String shopCode, int page, int size) {
         JPAQuery<Data> queryData = new JPAQuery<>(entityManager);
         QData qData = QData.data;
         BooleanBuilder filter = new BooleanBuilder();
@@ -38,7 +38,7 @@ public class CustomDataRepositoryImpl implements CustomDataRepository{
         if (account!= null){
             filter.and(qData.account.eq(account));
         }
-        List<Data> dataList = queryData.from(qData).where(filter).orderBy(qData.id.desc()).fetch();
+        List<Data> dataList = queryData.from(qData).where(filter).orderBy(qData.id.desc()).offset(page*size).limit(size).fetch();
         return dataList;
     }
 
