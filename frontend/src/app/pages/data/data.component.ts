@@ -30,6 +30,9 @@ export class DataComponent implements OnInit, AfterViewInit{
     // grid
     source: any
     dataAdapter: any;
+    page = 0;
+    size = 25;
+
     columns: any[] =
     [
         {
@@ -37,7 +40,7 @@ export class DataComponent implements OnInit, AfterViewInit{
             groupable: false, draggable: false, resizable: false,
             datafield: '', columntype: 'number', 
             cellsrenderer: (row: number, column: any, value: number): string => {
-                return '<div style="position: relative;top: 50%;left: 4px;transform: translateY(-50%);">' + (value + 1) + '</div>';
+                return '<div style="position: relative;top: 50%;left: 4px;transform: translateY(-50%);">' + (this.size*this.page + value + 1) + '</div>';
             }
         },
         { text: 'Ngày', editable: false, datafield: 'ngay', width: '10%'},
@@ -141,6 +144,7 @@ export class DataComponent implements OnInit, AfterViewInit{
     countList = [0,0,0,0,0,0,0,0];
     shopCode = '';
     tongDoanhSo = 0;
+    tongDon = 0;
 
     constructor(
         private dmService: DanhMucService,
@@ -224,7 +228,7 @@ export class DataComponent implements OnInit, AfterViewInit{
         let startDate = moment(date.startDate).format('YYYYMMDD') + '000000';
         let endDate = moment(date.endDate).format('YYYYMMDD') + '235959';
         const status = (this.statusDto !== '') ? this.statusDto : '0,1,2,3,4,5,6,7,8';
-        this.dmService.getOption(null, this.REQUEST_URL,"?status=" + status + '&startDate=' + startDate + '&endDate=' + endDate +'&shopCode='+this.shopCode ).subscribe(
+        this.dmService.getOption(null, this.REQUEST_URL,"?status=" + status + '&startDate=' + startDate + '&endDate=' + endDate +'&shopCode='+this.shopCode+'&page='+this.page+'&size='+this.size ).subscribe(
             (res: HttpResponse<any>) => {
               setTimeout(() => {
                 this.listEntity = res.body.RESULT;
@@ -237,18 +241,38 @@ export class DataComponent implements OnInit, AfterViewInit{
               console.error();
             }
           );
+        this.loadDataCount();
+    }
+
+    loadDataCount(){
+        var date = JSON.parse(JSON.stringify(this.dateRange));
+        date.endDate = date.endDate.replace("23:59:59", "00:00:00");
+        const startDate = moment(date.startDate).format('YYYYMMDD');
+        const endDate = moment(date.endDate).format('YYYYMMDD');
+        this.countList = [0,0,0,0,0,0,0,0,0];
+        this.tongDoanhSo = 0;
+        this.tongDon = 0;
+        this.dmService.getOption(null, this.REQUEST_URL, "/statisticdatabydateandstatus?startDate=" + startDate + "&endDate=" + endDate + "&shopCode=" + this.shopCode).subscribe(
+            (res: HttpResponse<any>) => {
+                const result = res.body.RESULT;
+                for (let index = 0; index < result.length; index++) {
+                    this.countList[Number(result[index].status)] = Number(result[index].count);
+                    this.tongDoanhSo += Number(result[index].sum);
+                    this.tongDon += Number(result[index].count);
+                }
+            },
+            () => {
+                console.error();
+            }
+        );
     }
 
     customDate(list: any[], status:any): any[] {
-        this.tongDoanhSo = 0;
-        if(status!=='') this.countList[Number(status)] = 0
-        else this.countList = [0,0,0,0,0,0,0,0,0];
         list.forEach(unitItem => {
             unitItem.ngay = unitItem.date? DateUtil.formatDate(unitItem.date):null;
             unitItem.nhanvien = unitItem.account? unitItem.account.userName:'';
             unitItem.nhanVienId = unitItem.account? unitItem.account.id:'';
-            this.countList[unitItem.status]++;
-            this.tongDoanhSo += Number(unitItem.price);
+            
         });
         return list;
       }
@@ -377,5 +401,18 @@ export class DataComponent implements OnInit, AfterViewInit{
 
     formatDate(date:any){
         return DateUtil.formatDate(date);
+    }
+
+    nextPage(){
+        this.page++;
+        this.loadData();
+    }
+    previousPage(){
+        if(this.page > 0) this.page--;
+        this.loadData();
+    }
+
+    onChangeDate(){
+        this.size = 10;
     }
 }

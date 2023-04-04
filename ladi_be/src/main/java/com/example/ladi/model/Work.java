@@ -1,6 +1,4 @@
 package com.example.ladi.model;
-
-import com.example.ladi.dto.StatisticDataByDateAndStatusDto;
 import com.example.ladi.dto.StatisticPerformanceSaleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

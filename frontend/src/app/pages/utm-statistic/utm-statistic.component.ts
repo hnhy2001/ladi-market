@@ -20,7 +20,6 @@ export class UtmStatisticComponent implements OnInit {
     listEntity = [];
     listEntityTop = [];
     total = 0;
-
     height: any = $(window).height()! - 240;
     pivotDataSource: null;
     dateRange: TimePeriod = {

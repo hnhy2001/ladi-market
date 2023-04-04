@@ -11,5 +11,6 @@ import lombok.Setter;
 @Getter
 public class StatisticDataByDateAndStatusDto {
     private int count;
+    private Long sum;
     private int status;
 }

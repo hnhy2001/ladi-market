@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DanhMucService } from 'app/danhmuc.service';
 import { NotificationService } from 'app/notification.service';
@@ -18,17 +19,22 @@ export class XuLyDuLieuPopupComponent implements OnInit,AfterViewInit {
   listProduct = [];
   selectedProductEntity: any;
   info:any;
+  link!: SafeResourceUrl;
   constructor(private activeModal: NgbActiveModal,
     private service: DanhMucService,
     private notificationService: NotificationService,
     private dmService: DanhMucService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    public sanitizer: DomSanitizer,
   ) 
   {
     this.info = this.localStorage.retrieve("authenticationToken");
   }
 
   ngOnInit(): void {
+    this.link = this.sanitizer.bypassSecurityTrustResourceUrl(
+      "http://103.75.187.109:3000?phone=" + this.data.phone
+    );
     this.loadDataProduct();
 
   }

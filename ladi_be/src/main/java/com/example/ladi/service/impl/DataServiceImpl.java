@@ -46,37 +46,38 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
     }
 
     @Override
-    public BaseResponse getAllData(String jwt, String status, String startDate, String endDate, String shopCode) {
+    public BaseResponse getAllData(String jwt, String status, String startDate, String endDate, String shopCode, int page, int size) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         String bearerToken = getJwtFromRequest(jwt);
         String userName = jwtTokenProvider.getAccountUserNameFromJWT(bearerToken);
         Account account = accountRepository.findByUserName(userName);
         List<DataDto> dataDtoList = new ArrayList<>();
         if (account.getRole().equals("admin")) {
-            List<Data> dataList = customDataRepository.finDataByConditions(status, startDate, endDate, null, shopCode);
-            for (int i = 0; i < dataList.size(); i++) {
-                if (dataList.get(i).getAccount() == null){
-                    DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
-                    dataDtoList.add(dataDto);
-                }
-                else {
-                    AccountDto accountDto = new AccountDto(dataList.get(i).getAccount().getId(), dataList.get(i).getAccount().getUserName(), dataList.get(i).getAccount().getFullName(), dataList.get(i).getAccount().getShop(), dataList.get(i).getAccount().getRole());
-                    DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
-                    dataDto.setAccount(accountDto);
-                    dataDtoList.add(dataDto);
-                }
-            }
-            return new BaseResponse(200, "OK", dataDtoList);
+            List<Data> dataList = customDataRepository.finDataByConditions(status, startDate, endDate, null, shopCode, page, size);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                if (dataList.get(i).getAccount() == null){
+//                    DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
+//                    dataDtoList.add(dataDto);
+//                }
+//                else {
+//                    AccountDto accountDto = new AccountDto(dataList.get(i).getAccount().getId(), dataList.get(i).getAccount().getUserName(), dataList.get(i).getAccount().getFullName(), dataList.get(i).getAccount().getShop(), dataList.get(i).getAccount().getRole());
+//                    DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
+//                    dataDto.setAccount(accountDto);
+//                    dataDtoList.add(dataDto);
+//                }
+//            }
+            return new BaseResponse(200, "OK", dataList);
         }else {
-            List<Data> dataList = customDataRepository.finDataByConditions(status, startDate, endDate, account, shopCode);
-            for (int i = 0; i<dataList.size(); i++){
-                AccountDto accountDto = modelMapper.map(dataList.get(i).getAccount(), AccountDto.class);
-                DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
-                dataDto.setAccount(accountDto);
-                dataDtoList.add(dataDto);
-            }
+            List<Data> dataList = customDataRepository.finDataByConditions(status, startDate, endDate, account, shopCode, page, size);
+//            for (int i = 0; i<dataList.size(); i++){
+//                AccountDto accountDto = modelMapper.map(dataList.get(i).getAccount(), AccountDto.class);
+//                DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
+//                dataDto.setAccount(accountDto);
+//                dataDtoList.add(dataDto);
+//            }
+            return new BaseResponse(200, "OK", dataList);
         }
-        return new BaseResponse(200, "OK", dataDtoList);
+
     }
 
     @Override
